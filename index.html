@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NW Florida Family Accountability Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a civic data desk. Summary tiles, then charts, then the de-identified table, then how it works and follow-the-money.
+   Colour-blind safe: navy + amber, every series also carries a pattern or shape and a text label. */
+:root {
+  --bg: #f4f5f8;
+  --surface: #ffffff;
+  --ink: #17213a;
+  --muted: #5a6478;
+  --line: #d9dde6;
+  --navy: #1f3a6e;
+  --navy-soft: #dbe4f4;
+  --amber: #c26a00;
+  --amber-soft: #fbead2;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10151f; --surface: #182031; --ink: #e8ecf4; --muted: #a3adc2; --line: #2c374d;
+    --navy: #8fb0ea; --navy-soft: #24345a; --amber: #f2a54a; --amber-soft: #4a3216; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10151f; --surface: #182031; --ink: #e8ecf4; --muted: #a3adc2; --line: #2c374d;
+  --navy: #8fb0ea; --navy-soft: #24345a; --amber: #f2a54a; --amber-soft: #4a3216; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5; }
+a { color: var(--navy); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.sample { background: var(--amber-soft); color: var(--ink); border-bottom: 2px dashed var(--amber); font-weight: 700; font-size: 14px; letter-spacing: .02em; }
+.sample .wrap { padding-top: 8px; padding-bottom: 8px; display: flex; gap: 10px; align-items: center; }
+.sample b { font-family: var(--font-display); }
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+header.top .wrap { padding-top: 22px; padding-bottom: 20px; display: grid; gap: 6px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; color: var(--navy); }
+h2 { font-size: 22px; font-weight: 800; }
+h3 { font-size: 16px; font-weight: 600; }
+.lede { color: var(--muted); max-width: 68ch; margin: 0; }
+nav.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+nav.jump a { text-decoration: none; font-size: 14px; font-weight: 600; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); }
+nav.jump a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+main { display: grid; gap: 28px; padding: 24px 0 48px; }
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; }
+.filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.filters label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+select, input[type=search] { font: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); min-width: 170px; }
+button.reset { font: inherit; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--navy); background: var(--surface); color: var(--navy); cursor: pointer; }
+.status { font-size: 14px; color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); border-left: 6px solid var(--navy); border-radius: 8px; padding: 14px; display: grid; gap: 2px; background: var(--surface); }
+.tile.alt { border-left-color: var(--amber); }
+.tile .n { font-family: var(--font-display); font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.tile .l { font-size: 14px; color: var(--muted); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 16px; }
+@media (max-width: 520px) { .grid2 { grid-template-columns: 1fr; } }
+.chart { border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 8px; min-width: 0; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart svg text { fill: var(--ink); font-family: var(--font-body); font-size: 14px; }
+.chart svg .muted { fill: var(--muted); }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: var(--navy-soft); font-weight: 700; position: sticky; top: 0; }
+td.id, td.mo { white-space: nowrap; } td.id { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.tag { display: inline-block; font-size: 12px; padding: 1px 8px; margin: 1px 2px 1px 0; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); }
+.pill { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+.pill.ongoing { background: var(--amber-soft); }
+.pill.ongoing::before { content: "◐ "; }
+.pill.reunified { background: var(--navy-soft); }
+.pill.reunified::before { content: "● "; }
+.pill.tpr::before { content: "■ "; }
+.pill.tpr { border: 1px solid var(--ink); }
+.pill.closed::before { content: "○ "; }
+.pill.closed { border: 1px dashed var(--muted); }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; counter-reset: s; padding: 0; margin: 0; list-style: none; }
+.steps li { border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 4px; counter-increment: s; }
+.steps li::before { content: "Step " counter(s); font-size: 12px; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: .06em; }
+.money { width: 100%; }
+.money td.amt { font-variant-numeric: tabular-nums; color: var(--muted); font-style: italic; }
+.pager { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.pager button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.pager button[disabled] { opacity: .45; cursor: default; }
+footer { color: var(--muted); font-size: 13px; padding-bottom: 32px; }
+@media (max-width: 420px) { .tile .n { font-size: 26px; } select, input[type=search] { min-width: 0; width: 100%; } .filters label { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="sample" role="note"><div class="wrap"><b>SAMPLE DATA</b> — illustrative only, not real submissions. Every record below is computer-generated.</div></div>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Northwest Florida Family Accountability Project</h1>
+    <p class="lede">What families report about child-welfare investigations, dependency cases and family court in Escambia, Santa Rosa, Okaloosa and Walton counties. Names, case numbers and anything that could identify a family are removed before a submission appears here.</p>
+    <nav class="jump" aria-label="Sections">
+      <a href="#dashboard">Dashboard</a><a href="#records">Submissions</a><a href="#how">How this works</a><a href="#money">Follow the money</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+  <section class="card" id="dashboard" aria-labelledby="dash-h">
+    <h2 id="dash-h">Dashboard</h2>
+    <div class="filters">
+      <label for="f-county">County<select id="f-county"></select></label>
+      <label for="f-type">Case type<select id="f-type"></select></label>
+      <label for="f-issue">Issue reported<select id="f-issue"></select></label>
+      <button class="reset" id="f-reset" type="button">Clear filters</button>
+    </div>
+    <p class="status" id="f-status" aria-live="polite"></p>
+    <div class="tiles" id="tiles"></div>
+    <div class="grid2">
+      <div class="chart"><h3>Issues reported</h3><div id="c-issue"></div></div>
+      <div class="chart"><h3>Submissions by county</h3><div id="c-county"></div></div>
+      <div class="chart"><h3>Who the report is about (role only)</h3><div id="c-role"></div></div>
+      <div class="chart"><h3>Submissions per month</h3><div id="c-month"></div></div>
+    </div>
+    <p class="note"><b>Why some numbers show "&lt;5":</b> when a filter narrows the view to fewer than 5 families, the exact count is hidden. In a small county, a group of 2 or 3 families with the same issue can be enough for someone to work out who they are.</p>
+  </section>
+
+  <section class="card" id="records" aria-labelledby="rec-h">
+    <h2 id="rec-h">De-identified submissions</h2>
+    <label for="q" class="status">Search tags, county, role or outcome</label>
+    <input type="search" id="q" placeholder="e.g. visitation, Santa Rosa, GAL">
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">ID</th><th scope="col">Month</th><th scope="col">County</th><th scope="col">Case type</th><th scope="col">Issues</th><th scope="col">Roles named</th><th scope="col">Months open</th><th scope="col">Outcome</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="pager"><button type="button" id="prev">Previous</button><span id="pg"></span><button type="button" id="next">Next</button></div>
+    <p class="note">No free-text stories are shown. The written account each family gives stays in the private form system; only the categories it was sorted into appear here.</p>
+  </section>
+
+  <section class="card" id="how" aria-labelledby="how-h">
+    <h2 id="how-h">How this works</h2>
+    <ol class="steps">
+      <li><h3>Family fills out the form</h3><span>The existing Jotform intake stays as it is. Families choose whether their submission is counted on this site.</span></li>
+      <li><h3>Identifying details are stripped</h3><span>Names, dates of birth, case numbers, addresses, phone numbers and emails are removed automatically. County is kept; exact dates become a month.</span></li>
+      <li><h3>Sorted into categories</h3><span>Each account is tagged with case type, the issues it describes, the roles involved and the outcome. A volunteer checks every tag.</span></li>
+      <li><h3>Counted on the dashboard</h3><span>Only the tags and counts appear here, with small groups hidden. The original forms never leave the private system.</span></li>
+    </ol>
+    <p class="note">A family can ask to be removed at any time; their record disappears from every count at the next update.</p>
+  </section>
+
+  <section class="card" id="money" aria-labelledby="money-h">
+    <h2 id="money-h">Follow the money <span class="pill ongoing">Placeholder</span></h2>
+    <p class="lede">Public money behind the system these families describe. Each line fills in as public-records responses come back.</p>
+    <div class="tablewrap">
+      <table class="money">
+        <thead><tr><th scope="col">Funding stream</th><th scope="col">Records request to</th><th scope="col">Fiscal year</th><th scope="col">Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Lead-agency community-based care contract (Circuit 1)</td><td>State child-welfare agency</td><td>FY 2025–26</td><td class="amt">awaiting records</td></tr>
+          <tr><td>Case-management subcontracts</td><td>Lead agency</td><td>FY 2025–26</td><td class="amt">awaiting records</td></tr>
+          <tr><td>Guardian ad litem program, circuit budget</td><td>State GAL office</td><td>FY 2025–26</td><td class="amt">awaiting records</td></tr>
+          <tr><td>Victim-services grants</td><td>State law enforcement grants office</td><td>FY 2025–26</td><td class="amt">awaiting records</td></tr>
+          <tr><td>Federal violence-against-women subawards</td><td>Federal grants office</td><td>FY 2025</td><td class="amt">awaiting records</td></tr>
+          <tr><td>Court-ordered service providers</td><td>County clerk / budget office</td><td>FY 2025–26</td><td class="amt">awaiting records</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Sample layout. No dollar figures are shown until they come from an official record.</p>
+  </section>
+</main>
+<footer>Working demo built for discussion. All records are synthetic. No real person, family, agency staff member or judge is named or described.</footer>
+</div>
+
+<script>
+(function () {
+  // ---------- synthetic data (seeded so it looks the same every load) ----------
+  var seed = 20261112;
+  function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+  function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+  function wpick(pairs) { var t = 0, i; for (i = 0; i < pairs.length; i++) t += pairs[i][1]; var r = rnd() * t; for (i = 0; i < pairs.length; i++) { r -= pairs[i][1]; if (r <= 0) return pairs[i][0]; } return pairs[0][0]; }
+
+  var COUNTIES = [["Escambia", 46], ["Santa Rosa", 18], ["Okaloosa", 14], ["Walton", 7], ["Other NW FL", 6]];
+  var TYPES = [["Dependency case", 38], ["DCF investigation only", 22], ["Family court custody", 24], ["Dependency + family court", 16]];
+  var ISSUES = [["Case plan not followed", 34], ["Missed or cancelled visitation", 31], ["GAL never met the child", 26], ["Reunification delayed", 24],
+    ["Services ordered but not provided", 22], ["Investigator interview irregular", 19], ["Records request denied or ignored", 17],
+    ["Removal without a court order", 12], ["Retaliation after a complaint", 11]];
+  var ROLES = [["Child protective investigator", 40], ["Case manager", 44], ["Guardian ad litem", 30], ["Judge or magistrate", 22], ["Attorney", 16], ["Service provider", 14]];
+  var OUTCOMES = [["Ongoing", 46], ["Reunified", 18], ["Closed", 22], ["Parental rights terminated", 6]];
+  var MONTHS = []; (function () { for (var y = 2025; y <= 2026; y++) for (var m = 1; m <= 12; m++) { if (y === 2026 && m > 10) break; MONTHS.push(y + "-" + (m < 10 ? "0" : "") + m); } })();
+
+  var DATA = [];
+  for (var i = 1; i <= 91; i++) {
+    var type = wpick(TYPES);
+    var tags = [], k = 1 + Math.floor(rnd() * 3);
+    while (tags.length < k) { var t = wpick(ISSUES); if (tags.indexOf(t) < 0) tags.push(t); }
+    var roles = [], r = 1 + Math.floor(rnd() * 2.4);
+    while (roles.length < r) { var ro = wpick(ROLES); if (roles.indexOf(ro) < 0) roles.push(ro); }
+    var mIdx = Math.min(MONTHS.length - 1, Math.floor(Math.pow(rnd(), 0.6) * MONTHS.length));
+    DATA.push({ id: "S-" + ("00" + i).slice(-3), month: MONTHS[mIdx], county: wpick(COUNTIES), type: type, tags: tags, roles: roles,
+      open: 2 + Math.floor(rnd() * 30), outcome: wpick(OUTCOMES) });
+  }
+
+  // ---------- helpers ----------
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var names = function (pairs) { return pairs.map(function (p) { return p[0]; }); };
+  function fillSelect(el, label, opts) { el.innerHTML = '<option value="">All ' + label + '</option>' + opts.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join(""); }
+  fillSelect($("f-county"), "counties", names(COUNTIES));
+  fillSelect($("f-type"), "case types", names(TYPES));
+  fillSelect($("f-issue"), "issues", names(ISSUES));
+  function filtered() {
+    var c = $("f-county").value, t = $("f-type").value, s = $("f-issue").value;
+    return DATA.filter(function (d) { return (!c || d.county === c) && (!t || d.type === t) && (!s || d.tags.indexOf(s) >= 0); });
+  }
+  function anyFilter() { return $("f-county").value || $("f-type").value || $("f-issue").value; }
+  function shown(n) { return n > 0 && n < 5 ? "<5" : String(n); }
+  function pct(n, of) { if (!of) return "–"; if (n > 0 && n < 5) return "<5 families"; return Math.round(100 * n / of) + "%"; }
+  function median(a) { if (!a.length) return 0; var s = a.slice().sort(function (x, y) { return x - y; }), h = Math.floor(s.length / 2); return s.length % 2 ? s[h] : Math.round((s[h - 1] + s[h]) / 2); }
+
+  // ---------- charts (SVG, patterned so colour is never the only cue) ----------
+  var DEFS = '<defs>' +
+    '<pattern id="p-diag" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--navy-soft)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--navy)" stroke-width="2.4"/></pattern>' +
+    '<pattern id="p-dots" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--amber-soft)"/><circle cx="3" cy="3" r="1.4" fill="var(--amber)"/></pattern>' +
+    '</defs>';
+  function hbar(el, pairs, fillId) {
+    var maxN = Math.max.apply(null, pairs.map(function (p) { return p[1]; }).concat([1]));
+    var rowH = 32, labW = 230, W = 580, barW = W - labW - 50, H = pairs.length * rowH + 6;
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Bar chart">' + DEFS;
+    pairs.forEach(function (p, i) {
+      var y = i * rowH + 4, w = p[1] ? Math.max(3, barW * p[1] / maxN) : 0;
+      s += '<text x="' + (labW - 8) + '" y="' + (y + 17) + '" text-anchor="end">' + esc(p[0]) + '</text>';
+      s += '<rect x="' + labW + '" y="' + (y + 4) + '" width="' + barW + '" height="18" fill="var(--bg)" rx="3"/>';
+      if (w) s += '<rect x="' + labW + '" y="' + (y + 4) + '" width="' + w + '" height="18" fill="url(#' + fillId + ')" stroke="var(--' + (fillId === "p-dots" ? "amber" : "navy") + ')" rx="3"/>';
+      s += '<text x="' + (labW + w + 6) + '" y="' + (y + 17) + '" style="font-weight:700;font-variant-numeric:tabular-nums">' + (anyFilter() ? shown(p[1]) : p[1]) + '</text>';
+    });
+    el.innerHTML = s + '</svg>';
+  }
+  function line(el, rows) {
+    var counts = MONTHS.map(function (m) { return rows.filter(function (d) { return d.month === m; }).length; });
+    var W = 560, H = 210, L = 34, B = 34, T = 12, R = 14, maxN = Math.max(4, Math.max.apply(null, counts));
+    var step = Math.ceil(maxN / 4), top = step * 4;
+    var x = function (i) { return L + i * (W - L - R) / (MONTHS.length - 1); }, y = function (v) { return T + (H - T - B) * (1 - v / top); };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Submissions per month">' + DEFS;
+    for (var g = 0; g <= 4; g++) { var gy = y(g * step); s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + gy + '" y2="' + gy + '" stroke="var(--line)"/><text x="' + (L - 6) + '" y="' + (gy + 4) + '" text-anchor="end" class="muted">' + g * step + '</text>'; }
+    var pts = counts.map(function (c, i) { return x(i) + "," + y(c); }).join(" ");
+    s += '<polygon points="' + x(0) + ',' + y(0) + ' ' + pts + ' ' + x(counts.length - 1) + ',' + y(0) + '" fill="url(#p-diag)" opacity=".55"/>';
+    s += '<polyline points="' + pts + '" fill="none" stroke="var(--navy)" stroke-width="2.5"/>';
+    counts.forEach(function (c, i) {
+      s += '<rect x="' + (x(i) - 3.5) + '" y="' + (y(c) - 3.5) + '" width="7" height="7" fill="var(--surface)" stroke="var(--navy)" stroke-width="2"/>';
+      if (i % 3 === 0 || i === counts.length - 1) s += '<text x="' + x(i) + '" y="' + (H - 12) + '" text-anchor="middle" class="muted">' + MONTHS[i].slice(2).replace("-", "/") + '</text>';
+    });
+    var last = counts.length - 1;
+    s += '<circle cx="' + x(last) + '" cy="' + y(counts[last]) + '" r="6" fill="var(--amber)" stroke="var(--surface)" stroke-width="2"/>';
+    el.innerHTML = s + '</svg>';
+  }
+
+  // ---------- render ----------
+  var page = 0, PER = 15;
+  function render() {
+    var rows = filtered(), n = rows.length;
+    $("f-status").textContent = anyFilter() ? "Showing " + shown(n) + " of " + DATA.length + " sample submissions." : "Showing all " + DATA.length + " sample submissions.";
+    var issueCounts = names(ISSUES).map(function (s) { return [s, rows.filter(function (d) { return d.tags.indexOf(s) >= 0; }).length]; }).sort(function (a, b) { return b[1] - a[1]; });
+    var top = issueCounts.slice(0, 3);
+    var tiles = '<div class="tile"><span class="n">' + shown(n) + '</span><span class="l">Families in this view</span></div>';
+    top.forEach(function (p) { tiles += '<div class="tile alt"><span class="n">' + pct(p[1], n) + '</span><span class="l">report “' + esc(p[0].toLowerCase()) + '”</span></div>'; });
+    tiles += '<div class="tile"><span class="n">' + (n >= 5 ? median(rows.map(function (d) { return d.open; })) : "<5") + '</span><span class="l">Median months the case has been open</span></div>';
+    $("tiles").innerHTML = tiles;
+    hbar($("c-issue"), issueCounts, "p-diag");
+    hbar($("c-county"), names(COUNTIES).map(function (c) { return [c, rows.filter(function (d) { return d.county === c; }).length]; }), "p-dots");
+    hbar($("c-role"), names(ROLES).map(function (r) { return [r, rows.filter(function (d) { return d.roles.indexOf(r) >= 0; }).length]; }).sort(function (a, b) { return b[1] - a[1]; }), "p-diag");
+    line($("c-month"), rows);
+    renderTable();
+  }
+  function renderTable() {
+    var q = $("q").value.trim().toLowerCase(), rows = filtered();
+    if (q) rows = rows.filter(function (d) { return [d.county, d.type, d.outcome, d.tags.join(" "), d.roles.join(" "), d.id].join(" ").toLowerCase().indexOf(q) >= 0; });
+    var pages = Math.max(1, Math.ceil(rows.length / PER)); if (page >= pages) page = pages - 1;
+    var slice = rows.slice(page * PER, page * PER + PER);
+    var cls = { "Ongoing": "ongoing", "Reunified": "reunified", "Closed": "closed", "Parental rights terminated": "tpr" };
+    $("rows").innerHTML = slice.length ? slice.map(function (d) {
+      return '<tr><td class="id">' + d.id + '</td><td class="mo">' + d.month + '</td><td>' + esc(d.county) + '</td><td>' + esc(d.type) + '</td><td>' +
+        d.tags.map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join("") + '</td><td>' + esc(d.roles.join(", ")) + '</td><td>' + d.open + '</td><td><span class="pill ' + cls[d.outcome] + '">' + esc(d.outcome) + '</span></td></tr>';
+    }).join("") : '<tr><td colspan="8">No sample submissions match. Clear a filter or change the search.</td></tr>';
+    $("pg").textContent = "Page " + (page + 1) + " of " + pages + " (" + rows.length + " rows)";
+    $("prev").disabled = page === 0; $("next").disabled = page >= pages - 1;
+  }
+  ["f-county", "f-type", "f-issue"].forEach(function (id) { $(id).addEventListener("change", function () { page = 0; render(); }); });
+  $("f-reset").addEventListener("click", function () { $("f-county").value = ""; $("f-type").value = ""; $("f-issue").value = ""; $("q").value = ""; page = 0; render(); });
+  $("q").addEventListener("input", function () { page = 0; renderTable(); });
+  $("prev").addEventListener("click", function () { if (page > 0) { page--; renderTable(); } });
+  $("next").addEventListener("click", function () { page++; renderTable(); });
+  render();
+})();
+</script>
+</body>
+</html>
